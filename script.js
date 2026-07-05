@@ -1,7 +1,15 @@
+// ============================================================
+//  PASTE YOUR 3 IMAGE URLs HERE
+// ============================================================
+const IMG_QUESTION = "https://0oxcr9y6frsouptv.public.blob.vercel-storage.com/ms-with-flower.png";   // Image 1: shown on all question screens
+const IMG_SAD = "https://0oxcr9y6frsouptv.public.blob.vercel-storage.com/ms-asking-a-question.png";  // Image 2: shown on all "Plsss aisa mat karo" screens
+const IMG_THANKYOU = "https://0oxcr9y6frsouptv.public.blob.vercel-storage.com/ms-with-coffee.png"; // Image 3: shown on Thank You screen
+// ============================================================
+
 const states = {
     start: {
         text: "Hello ji..... I have something to say, Sunau?",
-        image: "https://media1.tenor.com/m/h9j4-8hL1hMAAAAd/cat-hello.gif",
+        image: IMG_QUESTION,
         options: [
             { text: "Haan, sunao!", nextState: "question1", class: "bg-primary text-on-primary clay-btn", icon: "sentiment_satisfied" },
             { text: "Chodo na, kya fayda?", nextState: "sad1", class: "clay-btn-secondary clay-btn avoid-btn", icon: "close" }
@@ -9,14 +17,14 @@ const states = {
     },
     sad1: {
         text: "Plsss aisa mat karo na jiii",
-        image: "https://media1.tenor.com/m/Wq1-4J9-RzQAAAAd/cat-crying.gif",
+        image: IMG_SAD,
         options: [
             { text: "Go Back", nextState: "start", class: "clay-btn-secondary clay-btn", icon: "arrow_back_ios_new" }
         ]
     },
     question1: {
         text: "Kya tum mujhse naraz ho?",
-        image: "https://media1.tenor.com/m/n_H392Q0g6wAAAAC/cute-cat.gif",
+        image: IMG_QUESTION,
         options: [
             { text: "Nehi you are the cutest", nextState: "question2", class: "bg-primary text-on-primary clay-btn", icon: "sentiment_satisfied" },
             { text: "Narazgi nahi, direct gussa hoon! Bahut gussa!", nextState: "sad2", class: "clay-btn-secondary clay-btn avoid-btn", icon: "sentiment_dissatisfied" }
@@ -24,14 +32,14 @@ const states = {
     },
     sad2: {
         text: "Plsss aisa mat bolo na jiii",
-        image: "https://media1.tenor.com/m/Wq1-4J9-RzQAAAAd/cat-crying.gif",
+        image: IMG_SAD,
         options: [
             { text: "Go Back", nextState: "question1", class: "clay-btn-secondary clay-btn", icon: "arrow_back_ios_new" }
         ]
     },
     question2: {
         text: "Toh aapne mujhe maaf kar diya na, pakka???",
-        image: "https://media1.tenor.com/m/O9mUf41Bw2YAAAAC/please-pleading.gif",
+        image: IMG_QUESTION,
         options: [
             { text: "Haan, bilkul!", nextState: "successForm", class: "bg-primary text-on-primary clay-btn", icon: "sentiment_satisfied" },
             { text: "Bilkul nahi!!!", nextState: "sad3", class: "clay-btn-secondary clay-btn avoid-btn", icon: "sentiment_dissatisfied", id: "no-btn" }
@@ -39,7 +47,7 @@ const states = {
     },
     sad3: {
         text: "Plsss aisa mat karo na jiii",
-        image: "https://media1.tenor.com/m/Wq1-4J9-RzQAAAAd/cat-crying.gif",
+        image: IMG_SAD,
         options: [
             { text: "Go Back", nextState: "question2", class: "clay-btn-secondary clay-btn", icon: "arrow_back_ios_new" }
         ]
@@ -57,9 +65,13 @@ const questionText = document.getElementById('questionText');
 const optionsContainer = document.getElementById('optionsContainer');
 const messageScreen = document.getElementById('messageScreen');
 const thankYouScreen = document.getElementById('thankYouScreen');
+const thankYouImage = document.getElementById('thankYouImage');
 const messageForm = document.getElementById('messageForm');
 const sendBtn = document.getElementById('sendBtn');
 const statusMessage = document.getElementById('statusMessage');
+
+// Set thank you image from constant
+thankYouImage.src = IMG_THANKYOU;
 
 // --- Web Audio API Rain & Thunder ---
 let audioCtx = null;
@@ -137,10 +149,10 @@ startBtn.addEventListener('click', () => {
 
     startScreen.classList.remove('active');
     startScreen.classList.add('hidden-state');
-    
+
     gameContainer.classList.remove('hidden-state');
     gameContainer.classList.add('active');
-    
+
     renderState('start');
 });
 
@@ -148,19 +160,19 @@ function renderState(stateKey) {
     if (stateKey === 'successForm') {
         gameContainer.classList.remove('active');
         gameContainer.classList.add('hidden-state');
-        
+
         messageScreen.classList.remove('hidden-state');
         messageScreen.classList.add('active');
         return;
     }
 
     const state = states[stateKey];
-    
+
     // Re-trigger animations
     imageWrapper.classList.remove('animated-item');
     questionText.classList.remove('animated-item');
     optionsContainer.classList.remove('animated-item');
-    
+
     void imageWrapper.offsetWidth; // trigger reflow
 
     imageWrapper.classList.add('animated-item');
@@ -169,38 +181,38 @@ function renderState(stateKey) {
 
     questionText.textContent = state.text;
     mainImage.src = state.image;
-    
+
     // Clear old options
     optionsContainer.innerHTML = '';
-    
+
     // Add new options
     state.options.forEach(opt => {
         const btn = document.createElement('button');
         btn.className = `rounded-full px-6 py-3 font-title-md text-lg flex items-center justify-center gap-2 z-20 min-w-[180px] ${opt.class}`;
         if (opt.id) btn.id = opt.id;
-        
+
         const iconSpan = document.createElement('span');
         iconSpan.className = "material-symbols-outlined text-xl";
         iconSpan.textContent = opt.icon;
-        
+
         btn.appendChild(iconSpan);
-        
+
         const textSpan = document.createElement('span');
         textSpan.textContent = opt.text;
         btn.appendChild(textSpan);
-        
+
         btn.addEventListener('click', () => renderState(opt.nextState));
         optionsContainer.appendChild(btn);
 
         // Bind avoid logic if it has the avoid-btn class
         if (opt.class.includes('avoid-btn')) {
-            btn.addEventListener('mouseover', function() {
+            btn.addEventListener('mouseover', function () {
                 // Reduced jump distance to make it easier to click
                 const maxX = 60;
                 const maxY = 60;
                 const randomX = (Math.random() - 0.5) * maxX;
                 const randomY = (Math.random() - 0.5) * maxY;
-                
+
                 btn.style.transform = `translate(${randomX}px, ${randomY}px) scale(0.95)`;
             });
             const intervalId = setInterval(() => {
@@ -215,18 +227,18 @@ function renderState(stateKey) {
 }
 
 // Handle Form Submission
-messageForm.addEventListener('submit', function(e) {
+messageForm.addEventListener('submit', function (e) {
     e.preventDefault();
-    
+
     const subject = document.getElementById('subject').value || "Apology Website Message";
     const message = document.getElementById('message').value;
-    
+
     sendBtn.innerHTML = `<span>Sending...</span><span class="material-symbols-outlined animate-spin">refresh</span>`;
     sendBtn.disabled = true;
 
     fetch("https://formsubmit.co/ajax/adharshsuvi@gmail.com", {
         method: "POST",
-        headers: { 
+        headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         },
@@ -235,20 +247,20 @@ messageForm.addEventListener('submit', function(e) {
             message: message
         })
     })
-    .then(response => response.json())
-    .then(data => {
-        // Show Thank You Screen
-        messageScreen.classList.remove('active');
-        messageScreen.classList.add('hidden-state');
-        
-        thankYouScreen.classList.remove('hidden-state');
-        thankYouScreen.classList.add('active');
-    })
-    .catch(error => {
-        console.error(error);
-        statusMessage.textContent = "Oops! Something went wrong.";
-        statusMessage.classList.remove('hidden');
-        sendBtn.innerHTML = `<span>Send</span><span class="material-symbols-outlined">send</span>`;
-        sendBtn.disabled = false;
-    });
+        .then(response => response.json())
+        .then(data => {
+            // Show Thank You Screen
+            messageScreen.classList.remove('active');
+            messageScreen.classList.add('hidden-state');
+
+            thankYouScreen.classList.remove('hidden-state');
+            thankYouScreen.classList.add('active');
+        })
+        .catch(error => {
+            console.error(error);
+            statusMessage.textContent = "Oops! Something went wrong.";
+            statusMessage.classList.remove('hidden');
+            sendBtn.innerHTML = `<span>Send</span><span class="material-symbols-outlined">send</span>`;
+            sendBtn.disabled = false;
+        });
 });
