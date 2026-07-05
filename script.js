@@ -50,6 +50,7 @@ const states = {
 const startScreen = document.getElementById('startScreen');
 const startBtn = document.getElementById('startBtn');
 const gameContainer = document.getElementById('gameContainer');
+const bgMusic = document.getElementById('bgMusic');
 const imageWrapper = document.getElementById('imageWrapper');
 const mainImage = document.getElementById('mainImage');
 const questionText = document.getElementById('questionText');
@@ -123,8 +124,16 @@ function createRainSound() {
 
 // Init game
 startBtn.addEventListener('click', () => {
-    // Generate rain + thunder via Web Audio API
-    createRainSound();
+    // Try local rain.mp3 first, fall back to Web Audio API
+    if (bgMusic) {
+        bgMusic.volume = 0.5;
+        bgMusic.play().catch(() => {
+            // If file fails, use generated sound
+            createRainSound();
+        });
+    } else {
+        createRainSound();
+    }
 
     startScreen.classList.remove('active');
     startScreen.classList.add('hidden-state');
