@@ -1,0 +1,106 @@
+.material-symbols-outlined {
+    font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+/* Claymorphism styles */
+body {
+    background-color: transparent;
+    font-family: 'Outfit', sans-serif;
+}
+
+.clay-card {
+    background: rgba(250, 249, 251, 0.8);
+    backdrop-filter: blur(20px);
+    box-shadow: 
+        inset 2px 2px 5px rgba(255, 255, 255, 0.9), 
+        inset -2px -2px 5px rgba(103, 75, 181, 0.1),
+        0 15px 35px -5px rgba(103, 75, 181, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.clay-btn {
+    box-shadow: 
+        inset 2px 2px 4px rgba(255, 255, 255, 0.6), 
+        inset -2px -2px 4px rgba(0, 0, 0, 0.1), 
+        0 8px 20px rgba(103, 75, 181, 0.2);
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
+}
+
+.clay-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 
+        inset 2px 2px 4px rgba(255, 255, 255, 0.8), 
+        inset -2px -2px 4px rgba(0, 0, 0, 0.1), 
+        0 12px 25px rgba(103, 75, 181, 0.3);
+}
+
+.clay-btn:active {
+    transform: scale(0.98);
+}
+
+.clay-btn-secondary {
+    background: #faf9fb;
+    color: #674bb5;
+    box-shadow: 
+        inset 2px 2px 4px rgba(255, 255, 255, 1), 
+        inset -2px -2px 4px rgba(103, 75, 181, 0.05), 
+        0 8px 20px rgba(103, 75, 181, 0.1);
+}
+
+/* Moving background bubbles */
+.bg-bubble {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, rgba(206, 189, 255, 0.4), rgba(167, 139, 250, 0.1));
+    filter: blur(40px);
+    z-index: -1;
+    animation: float 20s infinite ease-in-out alternate;
+}
+
+@keyframes float {
+    0% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(50px, -50px) scale(1.2); }
+    66% { transform: translate(-30px, 20px) scale(0.9); }
+    100% { transform: translate(0, 0) scale(1); }
+}
+
+/* Screen Transitions */
+.screen {
+    grid-area: 1 / 1;
+    transition: opacity 0.5s ease-out, transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.hidden-state {
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0.95);
+    visibility: hidden;
+}
+
+.active {
+    opacity: 1;
+    pointer-events: auto;
+    transform: scale(1);
+    visibility: visible;
+}
+
+/* Item animations */
+@keyframes slideUpFade {
+    0% { transform: translateY(15px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+}
+
+.animated-item {
+    opacity: 0;
+    animation: slideUpFade 0.5s ease forwards;
+}
+
+#imageWrapper.animated-item { animation-delay: 0.1s; }
+#questionText.animated-item { animation-delay: 0.25s; }
+#optionsContainer.animated-item { animation-delay: 0.4s; }
+
+/* Avoid Button */
+.avoid-btn {
+    position: relative;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
